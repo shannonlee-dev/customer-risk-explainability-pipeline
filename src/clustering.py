@@ -59,7 +59,9 @@ def analyze_clusters(frame, x, scaled, out):
              'credit_card_count': ('다카드', '소수카드'), 'overdue_count_6m': ('연체이력 많은', '연체이력 적은')}
     for cluster in range(selected):
         z = (means.loc[cluster] - baseline_mean) / baseline_std
-        top = z.abs().nlargest(2).index.tolist()
+        ranked = z.abs().sort_values(ascending=False)
+        # Ignore tiny differences when naming personas; retain full statistics.
+        top = ranked[ranked >= .25].head(2).index.tolist() or ranked.head(1).index.tolist()
         mask = model.labels_ == cluster
         representative = int(x.index[mask][np.argmin(np.linalg.norm(scaled[mask] - model.cluster_centers_[cluster], axis=1))])
         personas.append({'cluster': cluster, 'name': ' · '.join(names[f][int(z[f] < 0)] for f in top),
