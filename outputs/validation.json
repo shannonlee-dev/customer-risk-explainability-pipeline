@@ -1,0 +1,11 @@
+{
+  "mission_generator_byte_match": true,
+  "data_sha256": "4ddf83dd154ee23bb2374a2bbc1aa56d537ef7ad5114c2f162078756542fe1a2",
+  "rows": 10000,
+  "overdue_rate": 0.1201,
+  "train_test_disjoint_and_complete": true,
+  "local_cases_verified": 4,
+  "png_files_verified": 10,
+  "readme_image_links_verified": 10,
+  "global_max_additivity_error": 4.884981308350689e-15
+}
