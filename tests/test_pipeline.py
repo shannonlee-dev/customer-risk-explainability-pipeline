@@ -1,3 +1,5 @@
+"""전처리, 모델 평가, SHAP의 핵심 계약을 검증한다."""
+
 import tempfile
 import unittest
 from pathlib import Path
@@ -6,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 from src.data import FEATURES, load_data, prepare_features
-from src.modeling import train_model, select_cases
+from src.modeling import select_cases, train_model
 from src.shap_analysis import explain_positive
 
 
@@ -33,9 +35,11 @@ class PipelineTests(unittest.TestCase):
                 frame.loc[0, 'is_overdue'] = 2
             else:
                 frame['customer_id'] = 1
+
             with tempfile.TemporaryDirectory() as tmp:
                 path = Path(tmp) / 'data.csv'
                 frame.to_csv(path, index=False)
+
                 with self.assertRaises(ValueError):
                     load_data(path)
 
@@ -45,15 +49,30 @@ class PipelineTests(unittest.TestCase):
         model, x_train, x_test, y_test, metrics = train_model(frame)
         self.assertFalse(set(x_train.index) & set(x_test.index))
         self.assertEqual(list(x_test.columns), FEATURES)
+
         for feature in FEATURES:
-            self.assertAlmostEqual(metrics['training_medians'][feature],
-                                   frame.loc[x_train.index, feature].median())
+            self.assertAlmostEqual(
+                metrics['training_medians'][feature],
+                frame.loc[x_train.index, feature].median(),
+            )
+
         explanation = explain_positive(model, x_test)
-        np.testing.assert_allclose(explanation.base_values + explanation.values.sum(axis=1),
-                                   model.predict_proba(x_test)[:, 1], atol=1e-6)
+        np.testing.assert_allclose(
+            explanation.base_values + explanation.values.sum(axis=1),
+            model.predict_proba(x_test)[:, 1],
+            atol=1e-6,
+        )
+
         cases = select_cases(model, x_test)
-        self.assertLess(model.predict_proba(x_test.loc[[cases['approval']]])[0, 1], .5)
-        self.assertGreaterEqual(model.predict_proba(x_test.loc[[cases['rejection']]])[0, 1], .5)
+        approval_probability = model.predict_proba(
+            x_test.loc[[cases['approval']]]
+        )[0, 1]
+        rejection_probability = model.predict_proba(
+            x_test.loc[[cases['rejection']]]
+        )[0, 1]
+
+        self.assertLess(approval_probability, .5)
+        self.assertGreaterEqual(rejection_probability, .5)
 
     def test_missing_rejection_is_explicit(self):
         frame = self.frame()

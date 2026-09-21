@@ -1,1 +1,1 @@
-"""Customer clustering and overdue prediction explanations."""
+"""고객 군집화와 연체 예측 결과를 설명하는 분석 패키지."""

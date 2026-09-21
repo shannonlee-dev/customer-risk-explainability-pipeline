@@ -1,7 +1,8 @@
-"""Reproduce the mission's exact seeded generator, only when explicitly invoked.
+"""요청할 때만 과제의 고정 시드 데이터 생성 과정을 재현한다.
 
-This does not establish byte identity with an unavailable Mission 23 CSV.
+사용할 수 없는 Mission 23 CSV와 바이트 단위로 동일함을 보장하지는 않는다.
 """
+
 import argparse
 from pathlib import Path
 
@@ -11,65 +12,60 @@ def main():
     parser.add_argument('--output', type=Path, default=Path('data/finance_data.csv'))
     args = parser.parse_args()
     destination = args.output
+
     if destination.exists():
         parser.error(f'Refusing to overwrite existing data: {destination}')
+
     destination.parent.mkdir(parents=True, exist_ok=True)
-    import pandas as pd
+
+    # 원본 생성 코드와 같은 시점에 의존성을 불러온다.
     import numpy as np
-    import random
+    import pandas as pd
 
-    # 1. 데이터 생성 설정
-    N_SAMPLES = 10000  # 샘플 개수
-    RANDOM_STATE = 42
-    np.random.seed(RANDOM_STATE)
+    sample_count = 10000
+    random_state = 42
+    np.random.seed(random_state)
 
-    # 2. Feature 생성 (가상의 고객 정보)
+    # 가상의 고객 입력 특성을 생성한다.
     data = {
-        'age': np.random.randint(20, 70, N_SAMPLES),  # 나이
-        'annual_income': np.random.normal(5000, 2000, N_SAMPLES).round(0), # 연 소득 (단위: 만원)
-        'spending_score': np.random.randint(1, 100, N_SAMPLES), # 소비 점수
-        'debt_ratio': np.random.uniform(0, 1, N_SAMPLES).round(2), # 소득 대비 부채 비율
-        'credit_card_count': np.random.randint(1, 10, N_SAMPLES), # 보유 신용카드 수
-        'overdue_count_6m': np.random.poisson(0.5, N_SAMPLES) # 최근 6개월 연체 횟수 (Poisson 분포)
+        'age': np.random.randint(20, 70, sample_count),
+        'annual_income': np.random.normal(5000, 2000, sample_count).round(0),
+        'spending_score': np.random.randint(1, 100, sample_count),
+        'debt_ratio': np.random.uniform(0, 1, sample_count).round(2),
+        'credit_card_count': np.random.randint(1, 10, sample_count),
+        'overdue_count_6m': np.random.poisson(0.5, sample_count),
     }
-
     df = pd.DataFrame(data)
 
-    # 소득이 음수인 경우 0으로 처리 (노이즈 수정)
+    # 생성 노이즈로 낮아진 소득에 하한을 적용한다.
     df['annual_income'] = df['annual_income'].apply(lambda x: max(x, 1500))
 
-    # 3. Target 1 생성: 신용 점수 (Credit Score) - 회귀 문제용
-    # 규칙: 소득이 높고 연체가 적을수록 점수가 높음 + 랜덤 노이즈
+    # 소득이 높고 연체가 적을수록 높아지는 신용 점수를 만든다.
     df['credit_score'] = (
         300
         + (df['annual_income'] / 100) * 3
         - (df['overdue_count_6m'] * 50)
         - (df['debt_ratio'] * 100)
-        + np.random.normal(0, 30, N_SAMPLES) # 노이즈 추가
+        + np.random.normal(0, 30, sample_count)
     )
-
-    # 신용점수 범위 제한 (0 ~ 1000점)
     df['credit_score'] = df['credit_score'].clip(0, 1000).round(0)
 
-    # 4. Target 2 생성: 연체 여부 (Overdue) - 분류 문제용
-    # 규칙: 신용점수가 낮고 부채 비율이 높으면 연체 확률 증가 (불균형 데이터 생성)
-    # 기본 연체율을 낮게 설정하여 '데이터 불균형' 상황 연출
-    threshold = df['credit_score'].quantile(0.15) # 하위 15% 점수 기준
+    # 하위 신용 점수와 높은 부채비율을 조합해 불균형 연체 타겟을 만든다.
+    threshold = df['credit_score'].quantile(0.15)
     df['is_overdue'] = np.where(
-        (df['credit_score'] < threshold) & (np.random.rand(N_SAMPLES) > 0.2),
-        1, # 연체 (Positive)
-        0  # 정상 (Negative)
+        (df['credit_score'] < threshold)
+        & (np.random.rand(sample_count) > 0.2),
+        1,
+        0,
     )
 
-    # 데이터 셔플
-    df = df.sample(frac=1, random_state=RANDOM_STATE).reset_index(drop=True)
-
-    # 5. 파일 저장
+    # 행 순서를 섞은 뒤 결과를 저장한다.
+    df = df.sample(frac=1, random_state=random_state).reset_index(drop=True)
     df.to_csv(destination, index=False)
 
-    print(f"데이터 생성 완료: finance_data.csv")
-    print(f"전체 샘플 수: {len(df)}")
-    print(f"연체(1) 비율: {df['is_overdue'].mean()*100:.2f}% (불균형 데이터 확인)")
+    print('데이터 생성 완료: finance_data.csv')
+    print(f'전체 샘플 수: {len(df)}')
+    print(f'연체(1) 비율: {df["is_overdue"].mean() * 100:.2f}% (불균형 데이터 확인)')
 
 
 if __name__ == '__main__':
