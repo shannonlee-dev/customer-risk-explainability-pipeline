@@ -42,11 +42,11 @@ def plot_k_selection(scores, selected, path):
 
 def plot_pca_clusters(coordinates, labels, variance, cluster_count, path):
     """PCA 좌표를 군집별 산점도로 그린다."""
-    plt.figure(figsize=(9, 6))
+    fig, ax = plt.subplots(figsize=(11, 6))
 
     for cluster in range(cluster_count):
         mask = labels == cluster
-        plt.scatter(
+        ax.scatter(
             coordinates[mask, 0],
             coordinates[mask, 1],
             s=8,
@@ -54,8 +54,16 @@ def plot_pca_clusters(coordinates, labels, variance, cluster_count, path):
             label=f'Cluster {cluster} (n={int(mask.sum())})',
         )
 
-    plt.xlabel(f'PC1 ({variance[0]:.1%} explained variance)')
-    plt.ylabel(f'PC2 ({variance[1]:.1%} explained variance)')
-    plt.title(f'Customer personas in PCA space | total variance {sum(variance):.1%}')
-    plt.legend(markerscale=2)
+    ax.set_xlabel(f'PC1 ({variance[0]:.1%} explained variance)')
+    ax.set_ylabel(f'PC2 ({variance[1]:.1%} explained variance)')
+    ax.set_title(
+        f'Customer personas in PCA space | total variance {sum(variance):.1%}'
+    )
+    ax.legend(
+        markerscale=2,
+        bbox_to_anchor=(1.02, 1),
+        loc='upper left',
+        borderaxespad=0,
+        fontsize=8,
+    )
     save_plot(path)
