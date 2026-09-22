@@ -41,7 +41,7 @@ def main():
     shap_out.mkdir(parents=True, exist_ok=True)
     model_out.mkdir(parents=True, exist_ok=True)
 
-    # 모델 학습과 전체 SHAP 분석에는 홀드아웃 고객만 사용한다.
+    # 모델은 학습 세트로 학습하고, 평가와 SHAP 분석에는 홀드아웃 세트만 사용한다.
     frame = load_data(args.data)
     model, x_train, x_test, y_test, metrics = train_model(frame)
     cases = select_cases(model, x_test)

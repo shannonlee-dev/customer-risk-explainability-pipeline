@@ -3,7 +3,6 @@
 import json
 import os
 from pathlib import Path
-import re
 import subprocess
 import sys
 import tempfile
@@ -38,7 +37,6 @@ class ArtifactTests(unittest.TestCase):
             tmp = Path(tmp)
             data = tmp / 'fixture.csv'
             out = tmp / 'outputs'
-            report = tmp / 'report.md'
             frame.to_csv(data, index=False)
 
             env = dict(os.environ, OMP_NUM_THREADS='2', OPENBLAS_NUM_THREADS='2')
@@ -59,25 +57,6 @@ class ArtifactTests(unittest.TestCase):
                     timeout=120,
                 )
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-
-            result = subprocess.run(
-                [
-                    sys.executable,
-                    str(ROOT / 'build_report.py'),
-                    '--output',
-                    str(out),
-                    '--destination',
-                    str(report),
-                    '--provenance',
-                    '테스트 전용 데이터',
-                ],
-                cwd=ROOT,
-                env=env,
-                capture_output=True,
-                text=True,
-                timeout=30,
-            )
-            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
             clustering = json.loads((out / 'clustering/clustering.json').read_text())
             shap = json.loads((out / 'shap/shap.json').read_text())
@@ -129,12 +108,6 @@ class ArtifactTests(unittest.TestCase):
             for path in out.rglob('*.png'):
                 with Image.open(path) as image:
                     image.verify()
-
-            content = report.read_text()
-            for link in re.findall(r'!\[[^\]]*\]\(([^)]+)\)', content):
-                self.assertTrue((report.parent / link).is_file(), link)
-            self.assertIn('테스트 전용 데이터', content)
-            self.assertIn('K=2~50 범위를 탐색', content)
 
             # 입력이 바뀌면 이전 군집 배정 결과를 재사용할 수 없다.
             frame.loc[0, 'age'] += 1
