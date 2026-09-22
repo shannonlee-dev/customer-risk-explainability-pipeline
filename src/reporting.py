@@ -312,13 +312,13 @@ def render_report(
     provenance='입력 CSV의 Mission 23 원본 여부는 확인되지 않았습니다.',
 ):
     """분석 산출물을 읽어 전체 Markdown 보고서를 생성한다."""
-    cluster = json.loads((out / 'clustering.json').read_text(encoding='utf-8'))
-    shap = json.loads((out / 'shap.json').read_text(encoding='utf-8'))
+    cluster = json.loads((out / 'clustering' / 'clustering.json').read_text(encoding='utf-8'))
+    shap = json.loads((out / 'shap' / 'shap.json').read_text(encoding='utf-8'))
 
     if cluster['data_sha256'] != shap['data_sha256']:
         raise ValueError('Clustering and SHAP input hashes do not match.')
 
-    predictions = pd.read_csv(out / 'holdout_predictions.csv')
+    predictions = pd.read_csv(out / 'model' / 'holdout_predictions.csv')
     m = shap['metrics']
     k = cluster['selected_k']
     best = next(score for score in cluster['scores'] if score['k'] == k)
@@ -423,7 +423,7 @@ def render_report(
         '높다는 이유만으로 자동 판정에 충분하다고 볼 수 없습니다. 테스트 '
         '데이터를 이용한 임계값 최적화는 하지 않았습니다.',
         '## 군집 수와 분리도',
-        pic('k_selection.png', 'Elbow와 Silhouette'),
+        pic('clustering/k_selection.png', 'Elbow와 Silhouette'),
         table(
             ['K', 'Inertia', 'Silhouette'],
             [
@@ -435,7 +435,9 @@ def render_report(
                 for score in cluster['scores']
             ],
         ),
-        f'같은 seed=42의 최대 2,000개 행에서 silhouette를 비교해 최대인 '
+        f'K={min(score["k"] for score in cluster["scores"])}~'
+        f'{max(score["k"] for score in cluster["scores"])} 범위를 탐색하고, '
+        '같은 seed=42의 최대 2,000개 행에서 silhouette를 비교해 최대인 '
         f'K={k}를 선택했습니다. Inertia는 군집 내 중심까지의 제곱거리 합이며 '
         'K가 증가하면 줄어드는 것이 정상입니다. Elbow 곡선은 감소 폭이 '
         '완만해지는지 확인하는 보조 근거로만 사용했고, 명확한 꺾임을 '
@@ -446,14 +448,14 @@ def render_report(
         f'위해 K를 변경하지 않았습니다. Silhouette {best["silhouette"]:.4f}는 '
         f'{silhouette_interpretation} 고객 집단이 자연적으로 존재한다고 단정할 '
         '수는 없습니다.',
-        pic('pca_clusters.png', '군집별 PCA 산점도'),
+        pic('clustering/pca_clusters.png', '군집별 PCA 산점도'),
         f'PC1={v1:.2%}, PC2={v2:.2%}, 합계={v1 + v2:.2%}이며 2차원 '
         f'투영에서 분산의 {1 - v1 - v2:.2%}를 버립니다. 투영 좌표에서 같은 '
         '라벨의 silhouette는 '
         f'{cluster["silhouette_pca_2d"]:.4f}입니다. 산점도에서 겹치는 점만으로 '
         '원래 6차원 군집 품질을 판단하면 안 됩니다. PC는 표준화된 여섯 원본 '
         '변수의 선형결합이지 소득이나 부채비율 자체가 아닙니다. '
-        '`outputs/pca_loadings.csv`의 계수는 축의 구성을 보여주지만 위험 '
+        f'`{image_prefix}/clustering/pca_loadings.csv`의 계수는 축의 구성을 보여주지만 위험 '
         '기여도는 아닙니다. PCA의 부호도 임의적이므로 PC1 증가를 위험 증가로 '
         '읽지 않습니다.\n\n스케일링 없이 소득 수천 단위와 0~1 부채비율의 '
         '유클리드 거리를 계산하면 소득이 거리를 지배합니다. StandardScaler로 '
@@ -484,7 +486,7 @@ def render_report(
         ),
         '관측 연체율은 군집을 만든 뒤 타겟으로 요약한 기술통계입니다. 군집 수 '
         '선정이나 거리 계산에 사용하지 않았습니다. 전체 변수의 '
-        '평균·중앙값·표준편차는 `outputs/cluster_statistics.csv`에 있습니다.',
+        f'평균·중앙값·표준편차는 `{image_prefix}/clustering/cluster_statistics.csv`에 있습니다.',
     ]
 
     for persona in cluster['personas']:
@@ -528,7 +530,7 @@ def render_report(
     parts.extend(
         [
             '## Global SHAP 해석',
-            pic('shap_summary.png', '전체 변수 중요도와 방향성'),
+            pic('shap/shap_summary.png', '전체 변수 중요도와 방향성'),
             '학습에 사용하지 않은 고객 중 seed=42로 '
             f'{shap["global_sample_size"]:,}명을 추출했습니다. Summary의 각 점은 '
             '고객 한 명이고 빨강은 큰 입력값, 파랑은 작은 입력값입니다. 양의 '
@@ -571,7 +573,7 @@ def render_report(
         parts.extend(
             [
                 pic(
-                    f'dependence_{feature}.png',
+                    f'shap/dependence/dependence_{feature}.png',
                     LABELS[feature] + ' dependence',
                 ),
                 f'{LABELS[feature]}는 {feature_reason}로 선택했습니다. 하위 사분위 '
@@ -641,7 +643,7 @@ def render_report(
                 f'### {case["case"]}: 고객 #{case["row_id"]} / '
                 f'C{case["cluster"]}',
                 pic(
-                    f'waterfall_{case["case"]}.png',
+                    f'shap/waterfall/waterfall_{case["case"]}.png',
                     case['case'] + ' waterfall',
                 ),
                 f'판정: **{decision}**, 예측 연체 확률 '
@@ -685,6 +687,15 @@ def render_report(
             '관리합니다. 이 정책은 운영 제안이며 자동 모니터링 시스템을 구현한 '
             '것은 아닙니다.',
             '## 산출물과 검증',
+            '```text\n'
+            'outputs/\n'
+            '├─ clustering/       # K 선택, PCA, 군집 배정·통계\n'
+            '├─ model/            # 학습 행 목록, 홀드아웃 예측\n'
+            '├─ shap/             # SHAP 요약, 중요도, 기여도\n'
+            '│  ├─ dependence/    # 변수별 dependence 그래프\n'
+            '│  └─ waterfall/     # 고객 ID가 표시된 개인별 그래프\n'
+            '└─ validation/       # 산출물 검증 기록\n'
+            '```',
             '`outputs/`에는 K 점수, PCA 좌표·계수, 군집 통계, 평가 예측, SHAP '
             '기여도, JSON 요약 및 PNG가 있습니다. 단위 테스트는 입력 '
             '스키마·타겟 제외·결측치 처리·평가 분리·승인/거절 기준·SHAP 확률 '

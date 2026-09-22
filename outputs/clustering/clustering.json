@@ -1,0 +1,829 @@
+{
+  "selected_k": 20,
+  "scores": [
+    {
+      "k": 2,
+      "inertia": 52274.24482339001,
+      "silhouette": 0.1362759139431328
+    },
+    {
+      "k": 3,
+      "inertia": 47231.89028541197,
+      "silhouette": 0.12482688427017925
+    },
+    {
+      "k": 4,
+      "inertia": 43140.456296806144,
+      "silhouette": 0.1278597761822637
+    },
+    {
+      "k": 5,
+      "inertia": 39830.62703296596,
+      "silhouette": 0.13064531824732387
+    },
+    {
+      "k": 6,
+      "inertia": 37296.417304386836,
+      "silhouette": 0.13483085761171135
+    },
+    {
+      "k": 7,
+      "inertia": 35279.32121130661,
+      "silhouette": 0.1359961935592048
+    },
+    {
+      "k": 8,
+      "inertia": 33690.80726927058,
+      "silhouette": 0.13419701773556408
+    },
+    {
+      "k": 9,
+      "inertia": 32081.519788261357,
+      "silhouette": 0.13762122362176007
+    },
+    {
+      "k": 10,
+      "inertia": 30668.639730952436,
+      "silhouette": 0.1396641411755238
+    },
+    {
+      "k": 11,
+      "inertia": 29534.900727329434,
+      "silhouette": 0.14225434284743899
+    },
+    {
+      "k": 12,
+      "inertia": 28806.70744877102,
+      "silhouette": 0.13447134739973976
+    },
+    {
+      "k": 13,
+      "inertia": 28088.285376534168,
+      "silhouette": 0.13322364446941914
+    },
+    {
+      "k": 14,
+      "inertia": 27275.79726241986,
+      "silhouette": 0.13606332607505395
+    },
+    {
+      "k": 15,
+      "inertia": 26570.826140912763,
+      "silhouette": 0.13331475695977127
+    },
+    {
+      "k": 16,
+      "inertia": 25859.540750808475,
+      "silhouette": 0.1322267004073767
+    },
+    {
+      "k": 17,
+      "inertia": 25249.796671874537,
+      "silhouette": 0.1398420955920765
+    },
+    {
+      "k": 18,
+      "inertia": 24372.080536868612,
+      "silhouette": 0.13936720194001434
+    },
+    {
+      "k": 19,
+      "inertia": 23862.26395361943,
+      "silhouette": 0.14564929791033104
+    },
+    {
+      "k": 20,
+      "inertia": 23460.981300935542,
+      "silhouette": 0.1477712182618993
+    },
+    {
+      "k": 21,
+      "inertia": 23049.65802657594,
+      "silhouette": 0.1452898933897373
+    },
+    {
+      "k": 22,
+      "inertia": 22717.035562410096,
+      "silhouette": 0.13813733709130585
+    },
+    {
+      "k": 23,
+      "inertia": 22342.597568709418,
+      "silhouette": 0.13856629196140755
+    },
+    {
+      "k": 24,
+      "inertia": 22025.366416497513,
+      "silhouette": 0.14202795548174219
+    },
+    {
+      "k": 25,
+      "inertia": 21742.97007678198,
+      "silhouette": 0.1402706553648525
+    },
+    {
+      "k": 26,
+      "inertia": 21448.035609351275,
+      "silhouette": 0.1368305801587731
+    },
+    {
+      "k": 27,
+      "inertia": 21131.227764777534,
+      "silhouette": 0.1382652534590876
+    },
+    {
+      "k": 28,
+      "inertia": 20802.47005846269,
+      "silhouette": 0.13728790407552957
+    },
+    {
+      "k": 29,
+      "inertia": 20532.48820296587,
+      "silhouette": 0.13845611329500634
+    },
+    {
+      "k": 30,
+      "inertia": 20185.716151909564,
+      "silhouette": 0.14208573871602653
+    },
+    {
+      "k": 31,
+      "inertia": 19987.668674943052,
+      "silhouette": 0.1403411539435669
+    },
+    {
+      "k": 32,
+      "inertia": 19730.767241297937,
+      "silhouette": 0.1362159194410524
+    },
+    {
+      "k": 33,
+      "inertia": 19411.794805868303,
+      "silhouette": 0.13914285787429453
+    },
+    {
+      "k": 34,
+      "inertia": 19214.998010668867,
+      "silhouette": 0.1429662564555705
+    },
+    {
+      "k": 35,
+      "inertia": 18860.96282968252,
+      "silhouette": 0.13556228356009728
+    },
+    {
+      "k": 36,
+      "inertia": 18766.77180226572,
+      "silhouette": 0.13776771665519152
+    },
+    {
+      "k": 37,
+      "inertia": 18501.46592644019,
+      "silhouette": 0.13649032853466372
+    },
+    {
+      "k": 38,
+      "inertia": 18205.003138575525,
+      "silhouette": 0.1398991107899657
+    },
+    {
+      "k": 39,
+      "inertia": 18059.68957634729,
+      "silhouette": 0.140699851958237
+    },
+    {
+      "k": 40,
+      "inertia": 17922.83933898463,
+      "silhouette": 0.13616573371501323
+    },
+    {
+      "k": 41,
+      "inertia": 17707.475023793777,
+      "silhouette": 0.13878321441706068
+    },
+    {
+      "k": 42,
+      "inertia": 17587.76202279188,
+      "silhouette": 0.1409764152472665
+    },
+    {
+      "k": 43,
+      "inertia": 17311.164651932286,
+      "silhouette": 0.1361320743772161
+    },
+    {
+      "k": 44,
+      "inertia": 17194.204391539733,
+      "silhouette": 0.14183574702055124
+    },
+    {
+      "k": 45,
+      "inertia": 17112.752535156666,
+      "silhouette": 0.1376626277776801
+    },
+    {
+      "k": 46,
+      "inertia": 16932.39991999123,
+      "silhouette": 0.13917118690433156
+    },
+    {
+      "k": 47,
+      "inertia": 16811.397475284055,
+      "silhouette": 0.13628392844230866
+    },
+    {
+      "k": 48,
+      "inertia": 16567.79919209194,
+      "silhouette": 0.14196508418776385
+    },
+    {
+      "k": 49,
+      "inertia": 16487.299769763053,
+      "silhouette": 0.14008605998136836
+    },
+    {
+      "k": 50,
+      "inertia": 16257.891619184255,
+      "silhouette": 0.1456182515994978
+    }
+  ],
+  "selection_reason": "Maximum silhouette on a fixed 2,000-row sample; inertia curve is supporting evidence. No override for persona aesthetics.",
+  "pca_variance_ratio": [
+    0.17474758128332865,
+    0.1713282925363371
+  ],
+  "silhouette_pca_2d": -0.11166246314757643,
+  "personas": [
+    {
+      "cluster": 0,
+      "name": "연령 낮은 · 소득 높은",
+      "count": 531,
+      "share": 0.0531,
+      "means": {
+        "age": 31.864406779661017,
+        "annual_income": 6661.836158192091,
+        "spending_score": 26.009416195856875,
+        "debt_ratio": 0.7327871939736347,
+        "credit_card_count": 3.005649717514124,
+        "overdue_count_6m": 0.3333333333333333
+      },
+      "z_scores": {
+        "age": -0.8893673670111907,
+        "annual_income": 0.8417532637985152,
+        "spending_score": -0.8310686486375464,
+        "debt_ratio": 0.803981614075766,
+        "credit_card_count": -0.7826238453248414,
+        "overdue_count_6m": -0.24127036470880436
+      },
+      "distinctive_features": [
+        "age",
+        "annual_income"
+      ],
+      "representative_row_id": 1822,
+      "observed_overdue_rate": 0.018832391713747645
+    },
+    {
+      "cluster": 1,
+      "name": "연체이력 많은 · 소비점수 높은",
+      "count": 433,
+      "share": 0.0433,
+      "means": {
+        "age": 55.25635103926097,
+        "annual_income": 3988.727482678984,
+        "spending_score": 71.31177829099308,
+        "debt_ratio": 0.28877598152424944,
+        "credit_card_count": 3.2933025404157044,
+        "overdue_count_6m": 1.327944572748268
+      },
+      "z_scores": {
+        "age": 0.7415547819800501,
+        "annual_income": -0.5401544521714818,
+        "spending_score": 0.7465434996844258,
+        "debt_ratio": -0.7381936097550467,
+        "credit_card_count": -0.6707582452963546,
+        "overdue_count_6m": 1.1485185338073183
+      },
+      "distinctive_features": [
+        "overdue_count_6m",
+        "spending_score"
+      ],
+      "representative_row_id": 6190,
+      "observed_overdue_rate": 0.21709006928406466
+    },
+    {
+      "cluster": 2,
+      "name": "다카드 · 소비점수 낮은",
+      "count": 610,
+      "share": 0.061,
+      "means": {
+        "age": 55.8,
+        "annual_income": 6315.57868852459,
+        "spending_score": 26.28360655737705,
+        "debt_ratio": 0.7307377049180328,
+        "credit_card_count": 7.155737704918033,
+        "overdue_count_6m": 0.34262295081967215
+      },
+      "z_scores": {
+        "age": 0.7794588194343747,
+        "annual_income": 0.6627497412597546,
+        "spending_score": -0.8215202272025091,
+        "debt_ratio": 0.7968631649140302,
+        "credit_card_count": 0.8313081098668392,
+        "overdue_count_6m": -0.22828980834432025
+      },
+      "distinctive_features": [
+        "credit_card_count",
+        "spending_score"
+      ],
+      "representative_row_id": 4494,
+      "observed_overdue_rate": 0.03114754098360656
+    },
+    {
+      "cluster": 3,
+      "name": "부채비율 낮은 · 소비점수 낮은",
+      "count": 544,
+      "share": 0.0544,
+      "means": {
+        "age": 55.58455882352941,
+        "annual_income": 6375.661764705882,
+        "spending_score": 25.395220588235293,
+        "debt_ratio": 0.2525367647058823,
+        "credit_card_count": 2.9613970588235294,
+        "overdue_count_6m": 0.33088235294117646
+      },
+      "z_scores": {
+        "age": 0.7644379309348475,
+        "annual_income": 0.6938106806576649,
+        "spending_score": -0.8524574329573342,
+        "debt_ratio": -0.8640625534693668,
+        "credit_card_count": -0.7998333069506464,
+        "overdue_count_6m": -0.24469516547971062
+      },
+      "distinctive_features": [
+        "debt_ratio",
+        "spending_score"
+      ],
+      "representative_row_id": 6608,
+      "observed_overdue_rate": 0.003676470588235294
+    },
+    {
+      "cluster": 4,
+      "name": "연령 낮은 · 부채비율 높은",
+      "count": 635,
+      "share": 0.0635,
+      "means": {
+        "age": 32.253543307086616,
+        "annual_income": 3648.6110236220475,
+        "spending_score": 28.100787401574802,
+        "debt_ratio": 0.7245826771653544,
+        "credit_card_count": 6.988976377952756,
+        "overdue_count_6m": 0.3669291338582677
+      },
+      "z_scores": {
+        "age": -0.8622361728480766,
+        "annual_income": -0.7159832777649475,
+        "spending_score": -0.7582386135532256,
+        "debt_ratio": 0.7754850306777158,
+        "credit_card_count": 0.7664561271386877,
+        "overdue_count_6m": -0.194326323905705
+      },
+      "distinctive_features": [
+        "age",
+        "debt_ratio"
+      ],
+      "representative_row_id": 1842,
+      "observed_overdue_rate": 0.2614173228346457
+    },
+    {
+      "cluster": 5,
+      "name": "소비점수 높은 · 부채비율 낮은",
+      "count": 549,
+      "share": 0.0549,
+      "means": {
+        "age": 33.42622950819672,
+        "annual_income": 6315.635701275046,
+        "spending_score": 74.79052823315118,
+        "debt_ratio": 0.260655737704918,
+        "credit_card_count": 2.8979963570127505,
+        "overdue_count_6m": 0.2331511839708561
+      },
+      "z_scores": {
+        "age": -0.7804746964192005,
+        "annual_income": 0.6627792149435168,
+        "spending_score": 0.8676876942895059,
+        "debt_ratio": -0.8358630876653551,
+        "credit_card_count": -0.8244892706180588,
+        "overdue_count_6m": -0.3812567568748089
+      },
+      "distinctive_features": [
+        "spending_score",
+        "debt_ratio"
+      ],
+      "representative_row_id": 4764,
+      "observed_overdue_rate": 0.0018214936247723133
+    },
+    {
+      "cluster": 6,
+      "name": "소수카드 · 소득 낮은",
+      "count": 517,
+      "share": 0.0517,
+      "means": {
+        "age": 33.177949709864606,
+        "annual_income": 3393.7021276595747,
+        "spending_score": 27.61121856866538,
+        "debt_ratio": 0.30177949709864604,
+        "credit_card_count": 2.6827852998065764,
+        "overdue_count_6m": 0.2611218568665377
+      },
+      "z_scores": {
+        "age": -0.7977851438857784,
+        "annual_income": -0.8477626451460053,
+        "spending_score": -0.7752873876682653,
+        "debt_ratio": -0.6930287603565227,
+        "credit_card_count": -0.908182918412959,
+        "overdue_count_6m": -0.3421728121796828
+      },
+      "distinctive_features": [
+        "credit_card_count",
+        "annual_income"
+      ],
+      "representative_row_id": 274,
+      "observed_overdue_rate": 0.10058027079303675
+    },
+    {
+      "cluster": 7,
+      "name": "부채비율 낮은 · 소비점수 높은",
+      "count": 549,
+      "share": 0.0549,
+      "means": {
+        "age": 33.287795992714024,
+        "annual_income": 3690.032786885246,
+        "spending_score": 74.77049180327869,
+        "debt_ratio": 0.2495264116575592,
+        "credit_card_count": 7.169398907103825,
+        "overdue_count_6m": 0.3424408014571949
+      },
+      "z_scores": {
+        "age": -0.790126492954702,
+        "annual_income": -0.6945696125492941,
+        "spending_score": 0.8669899444655682,
+        "debt_ratio": -0.8745183522328647,
+        "credit_card_count": 0.8366208287347052,
+        "overdue_count_6m": -0.22854432905734937
+      },
+      "distinctive_features": [
+        "debt_ratio",
+        "spending_score"
+      ],
+      "representative_row_id": 8303,
+      "observed_overdue_rate": 0.10018214936247723
+    },
+    {
+      "cluster": 8,
+      "name": "연체이력 많은 · 소비점수 높은",
+      "count": 280,
+      "share": 0.028,
+      "means": {
+        "age": 37.75714285714286,
+        "annual_income": 5781.546428571429,
+        "spending_score": 78.00714285714285,
+        "debt_ratio": 0.50925,
+        "credit_card_count": 5.882142857142857,
+        "overdue_count_6m": 2.1892857142857145
+      },
+      "z_scores": {
+        "age": -0.47851679040806133,
+        "annual_income": 0.3866729369882218,
+        "spending_score": 0.9797032730053052,
+        "debt_ratio": 0.027574369202192986,
+        "credit_card_count": 0.336018509012459,
+        "overdue_count_6m": 2.352086630472015
+      },
+      "distinctive_features": [
+        "overdue_count_6m",
+        "spending_score"
+      ],
+      "representative_row_id": 8703,
+      "observed_overdue_rate": 0.3
+    },
+    {
+      "cluster": 9,
+      "name": "부채비율 높은 · 소수카드",
+      "count": 593,
+      "share": 0.0593,
+      "means": {
+        "age": 34.640809443507585,
+        "annual_income": 3913.1720067453625,
+        "spending_score": 71.54300168634065,
+        "debt_ratio": 0.770522765598651,
+        "credit_card_count": 2.7234401349072512,
+        "overdue_count_6m": 0.35075885328836426
+      },
+      "z_scores": {
+        "age": -0.6957923247345171,
+        "annual_income": -0.5792141043782576,
+        "spending_score": 0.7545956369374576,
+        "debt_ratio": 0.935047816877631,
+        "credit_card_count": -0.8923726180768756,
+        "overdue_count_6m": -0.21692135956522793
+      },
+      "distinctive_features": [
+        "debt_ratio",
+        "credit_card_count"
+      ],
+      "representative_row_id": 3043,
+      "observed_overdue_rate": 0.24451939291736932
+    },
+    {
+      "cluster": 10,
+      "name": "연령 낮은 · 부채비율 높은",
+      "count": 506,
+      "share": 0.0506,
+      "means": {
+        "age": 31.09881422924901,
+        "annual_income": 6418.268774703557,
+        "spending_score": 73.15810276679842,
+        "debt_ratio": 0.7476679841897234,
+        "credit_card_count": 7.092885375494071,
+        "overdue_count_6m": 0.3221343873517787
+      },
+      "z_scores": {
+        "age": -0.9427456511637448,
+        "annual_income": 0.7158370787646914,
+        "spending_score": 0.8108400128917899,
+        "debt_ratio": 0.855666763772052,
+        "credit_card_count": 0.8068654032968947,
+        "overdue_count_6m": -0.25691886151183846
+      },
+      "distinctive_features": [
+        "age",
+        "debt_ratio"
+      ],
+      "representative_row_id": 4939,
+      "observed_overdue_rate": 0.017786561264822136
+    },
+    {
+      "cluster": 11,
+      "name": "다카드 · 소비점수 높은",
+      "count": 515,
+      "share": 0.0515,
+      "means": {
+        "age": 55.054368932038834,
+        "annual_income": 6760.403883495145,
+        "spending_score": 76.47961165048544,
+        "debt_ratio": 0.28114563106796114,
+        "credit_card_count": 7.50873786407767,
+        "overdue_count_6m": 0.37087378640776697
+      },
+      "z_scores": {
+        "age": 0.7274722803840866,
+        "annual_income": 0.8927094787065216,
+        "spending_score": 0.9265084355373847,
+        "debt_ratio": -0.7646959526979636,
+        "credit_card_count": 0.968586702220703,
+        "overdue_count_6m": -0.18881438707597215
+      },
+      "distinctive_features": [
+        "credit_card_count",
+        "spending_score"
+      ],
+      "representative_row_id": 3378,
+      "observed_overdue_rate": 0.0
+    },
+    {
+      "cluster": 12,
+      "name": "연령 높은 · 소비점수 높은",
+      "count": 470,
+      "share": 0.047,
+      "means": {
+        "age": 57.37021276595745,
+        "annual_income": 3780.9893617021276,
+        "spending_score": 74.97021276595744,
+        "debt_ratio": 0.285595744680851,
+        "credit_card_count": 3.246808510638298,
+        "overdue_count_6m": 0.0
+      },
+      "z_scores": {
+        "age": 0.8889364562741523,
+        "annual_income": -0.6475481076965128,
+        "spending_score": 0.8739450391322631,
+        "debt_ratio": -0.7492394624909436,
+        "credit_card_count": -0.6888393560128361,
+        "overdue_count_6m": -0.707043269552056
+      },
+      "distinctive_features": [
+        "age",
+        "spending_score"
+      ],
+      "representative_row_id": 3178,
+      "observed_overdue_rate": 0.014893617021276596
+    },
+    {
+      "cluster": 13,
+      "name": "소비점수 낮은 · 소수카드",
+      "count": 529,
+      "share": 0.0529,
+      "means": {
+        "age": 55.70321361058601,
+        "annual_income": 3681.156899810964,
+        "spending_score": 23.200378071833647,
+        "debt_ratio": 0.7348015122873346,
+        "credit_card_count": 2.667296786389414,
+        "overdue_count_6m": 0.2646502835538752
+      },
+      "z_scores": {
+        "age": 0.772710724258345,
+        "annual_income": -0.6991581490896851,
+        "spending_score": -0.928890759110554,
+        "debt_ratio": 0.8109779054062485,
+        "credit_card_count": -0.9142062622115108,
+        "overdue_count_6m": -0.3372424755366199
+      },
+      "distinctive_features": [
+        "spending_score",
+        "credit_card_count"
+      ],
+      "representative_row_id": 3550,
+      "observed_overdue_rate": 0.23251417769376181
+    },
+    {
+      "cluster": 14,
+      "name": "다카드 · 부채비율 낮은",
+      "count": 575,
+      "share": 0.0575,
+      "means": {
+        "age": 55.27304347826087,
+        "annual_income": 3746.6034782608695,
+        "spending_score": 27.262608695652172,
+        "debt_ratio": 0.26227826086956524,
+        "credit_card_count": 7.271304347826087,
+        "overdue_count_6m": 0.3165217391304348
+      },
+      "z_scores": {
+        "age": 0.7427186043705059,
+        "annual_income": -0.6653244585359708,
+        "spending_score": -0.7874273985916618,
+        "debt_ratio": -0.83022761055475,
+        "credit_card_count": 0.8762509396356631,
+        "overdue_count_6m": -0.2647615199095944
+      },
+      "distinctive_features": [
+        "credit_card_count",
+        "debt_ratio"
+      ],
+      "representative_row_id": 1745,
+      "observed_overdue_rate": 0.06434782608695652
+    },
+    {
+      "cluster": 15,
+      "name": "소득 높은 · 연령 높은",
+      "count": 482,
+      "share": 0.0482,
+      "means": {
+        "age": 57.392116182572614,
+        "annual_income": 6818.209543568465,
+        "spending_score": 67.42323651452283,
+        "debt_ratio": 0.7499792531120332,
+        "credit_card_count": 2.966804979253112,
+        "overdue_count_6m": 0.42738589211618255
+      },
+      "z_scores": {
+        "age": 0.890463595997974,
+        "annual_income": 0.9225930702020024,
+        "spending_score": 0.6111286899017898,
+        "debt_ratio": 0.8636944476855583,
+        "credit_card_count": -0.7977302152526081,
+        "overdue_count_6m": -0.10984896417211927
+      },
+      "distinctive_features": [
+        "annual_income",
+        "age"
+      ],
+      "representative_row_id": 3769,
+      "observed_overdue_rate": 0.024896265560165973
+    },
+    {
+      "cluster": 16,
+      "name": "연체이력 많은 · 부채비율 높은",
+      "count": 244,
+      "share": 0.0244,
+      "means": {
+        "age": 45.80327868852459,
+        "annual_income": 3647.3647540983607,
+        "spending_score": 38.14344262295082,
+        "debt_ratio": 0.7552459016393442,
+        "credit_card_count": 4.245901639344262,
+        "overdue_count_6m": 2.1885245901639343
+      },
+      "z_scores": {
+        "age": 0.08247211224833294,
+        "annual_income": -0.7166275573959021,
+        "spending_score": -0.4085125916433683,
+        "debt_ratio": 0.8819869922063118,
+        "credit_card_count": -0.3003010089886152,
+        "overdue_count_6m": 2.3510230974925714
+      },
+      "distinctive_features": [
+        "overdue_count_6m",
+        "debt_ratio"
+      ],
+      "representative_row_id": 1692,
+      "observed_overdue_rate": 0.7131147540983607
+    },
+    {
+      "cluster": 17,
+      "name": "연령 높은 · 부채비율 높은",
+      "count": 595,
+      "share": 0.0595,
+      "means": {
+        "age": 56.714285714285715,
+        "annual_income": 3586.1478991596637,
+        "spending_score": 72.85378151260504,
+        "debt_ratio": 0.7377983193277311,
+        "credit_card_count": 6.984873949579832,
+        "overdue_count_6m": 0.3411764705882353
+      },
+      "z_scores": {
+        "age": 0.8432042185079426,
+        "annual_income": -0.7482746224636787,
+        "spending_score": 0.8002423114606849,
+        "debt_ratio": 0.8213866550925598,
+        "credit_card_count": 0.7648607295796375,
+        "overdue_count_6m": -0.2303110022419043
+      },
+      "distinctive_features": [
+        "age",
+        "debt_ratio"
+      ],
+      "representative_row_id": 2706,
+      "observed_overdue_rate": 0.2689075630252101
+    },
+    {
+      "cluster": 18,
+      "name": "연령 낮은 · 소비점수 낮은",
+      "count": 561,
+      "share": 0.0561,
+      "means": {
+        "age": 32.046345811051694,
+        "annual_income": 6504.821746880571,
+        "spending_score": 25.240641711229948,
+        "debt_ratio": 0.26176470588235295,
+        "credit_card_count": 6.836007130124777,
+        "overdue_count_6m": 0.2976827094474153
+      },
+      "z_scores": {
+        "age": -0.876682299332847,
+        "annual_income": 0.7605820684417731,
+        "spending_score": -0.857840496951337,
+        "debt_ratio": -0.8320113307743014,
+        "credit_card_count": 0.7069677601497149,
+        "overdue_count_6m": -0.29108564864925907
+      },
+      "distinctive_features": [
+        "age",
+        "spending_score"
+      ],
+      "representative_row_id": 7239,
+      "observed_overdue_rate": 0.0
+    },
+    {
+      "cluster": 19,
+      "name": "연체이력 많은 · 소비점수 낮은",
+      "count": 282,
+      "share": 0.0282,
+      "means": {
+        "age": 45.54609929078014,
+        "annual_income": 5954.91134751773,
+        "spending_score": 24.138297872340427,
+        "debt_ratio": 0.32492907801418436,
+        "credit_card_count": 5.453900709219858,
+        "overdue_count_6m": 2.226950354609929
+      },
+      "z_scores": {
+        "age": 0.06454117109223312,
+        "annual_income": 0.47629679753868004,
+        "spending_score": -0.8962285842702253,
+        "debt_ratio": -0.6126237860472771,
+        "credit_card_count": 0.1694789828167258,
+        "overdue_count_6m": 2.4047161372730717
+      },
+      "distinctive_features": [
+        "overdue_count_6m",
+        "spending_score"
+      ],
+      "representative_row_id": 284,
+      "observed_overdue_rate": 0.18085106382978725
+    }
+  ],
+  "missing_values": {
+    "age": 0,
+    "annual_income": 0,
+    "spending_score": 0,
+    "debt_ratio": 0,
+    "credit_card_count": 0,
+    "overdue_count_6m": 0
+  },
+  "data_path": "data/finance_data.csv",
+  "data_sha256": "4ddf83dd154ee23bb2374a2bbc1aa56d537ef7ad5114c2f162078756542fe1a2",
+  "rows": 10000
+}

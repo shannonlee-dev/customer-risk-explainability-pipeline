@@ -15,7 +15,8 @@ def analyze_clusters(frame, x, scaled, out):
     rows = []
     models = {}
 
-    for k in range(2, 9):
+    # 실루엣 계산에는 군집 수보다 많은 행이 필요하다.
+    for k in range(2, min(51, len(x))):
         model = KMeans(n_clusters=k, n_init=10, random_state=SEED).fit(scaled)
         score = silhouette_score(
             scaled,

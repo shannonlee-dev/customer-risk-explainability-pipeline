@@ -27,13 +27,19 @@ def main():
     if args.sample_size < 2:
         parser.error('--sample-size must be at least 2')
 
-    cluster_path = args.output / 'clustering.json'
+    cluster_out = args.output / 'clustering'
+    shap_out = args.output / 'shap'
+    model_out = args.output / 'model'
+    cluster_path = cluster_out / 'clustering.json'
     if not cluster_path.is_file():
         parser.error('Run analysis_clustering.py first.')
 
     clusters = json.loads(cluster_path.read_text(encoding='utf-8'))
     if fingerprint(args.data) != clusters['data_sha256']:
         parser.error('CSV differs from the clustering run; rerun clustering.')
+
+    shap_out.mkdir(parents=True, exist_ok=True)
+    model_out.mkdir(parents=True, exist_ok=True)
 
     # 모델 학습과 전체 SHAP 분석에는 홀드아웃 고객만 사용한다.
     frame = load_data(args.data)
@@ -44,7 +50,7 @@ def main():
         random_state=SEED,
     )
     explanation = explain_positive(model, global_x)
-    create_summary_plot(explanation, args.output / 'shap_summary.png')
+    create_summary_plot(explanation, shap_out / 'shap_summary.png')
 
     importance = pd.DataFrame(
         {
@@ -53,7 +59,7 @@ def main():
             'impurity_importance': model.feature_importances_,
         }
     ).sort_values('mean_abs_shap', ascending=False)
-    importance.to_csv(args.output / 'feature_importance.csv', index=False)
+    importance.to_csv(shap_out / 'feature_importance.csv', index=False)
 
     dependencies = list(
         dict.fromkeys(importance.feature.head(2).tolist() + ['debt_ratio'])
@@ -78,11 +84,11 @@ def main():
             create_dependence_plot(
                 explanation,
                 feature,
-                args.output / f'dependence_{feature}.png',
+                shap_out / 'dependence' / f'dependence_{feature}.png',
             )
             dependence_stats.append(stats)
 
-    assignments = pd.read_csv(args.output / 'cluster_assignments.csv').set_index('row_id')
+    assignments = pd.read_csv(cluster_out / 'cluster_assignments.csv').set_index('row_id')
 
     # 각 군집 평균에 가장 가까운 홀드아웃 고객을 대표 사례로 선택한다.
     scale = x_train.std(ddof=0).replace(0, 1)
@@ -104,7 +110,9 @@ def main():
         position = local_x.index.get_loc(row_id)
         exp = local_explanation[position]
         probability = float(model.predict_proba(local_x.loc[[row_id]])[0, 1])
-        create_waterfall_plot(exp, args.output / f'waterfall_{name}.png')
+        create_waterfall_plot(
+            exp, shap_out / 'waterfall' / f'waterfall_{name}.png', row_id=row_id
+        )
         local_results.append(
             {
                 'case': name,
@@ -128,18 +136,18 @@ def main():
         }
     )
     holdout_predictions.to_csv(
-        args.output / 'holdout_predictions.csv',
+        model_out / 'holdout_predictions.csv',
         index=False,
     )
     pd.DataFrame({'row_id': x_train.index}).to_csv(
-        args.output / 'train_rows.csv',
+        model_out / 'train_rows.csv',
         index=False,
     )
     pd.DataFrame(
         explanation.values,
         index=global_x.index,
         columns=FEATURES,
-    ).rename_axis('row_id').to_csv(args.output / 'global_shap_values.csv')
+    ).rename_axis('row_id').to_csv(shap_out / 'global_shap_values.csv')
 
     predicted_probability = model.predict_proba(global_x)[:, 1]
     additivity_error = np.abs(
@@ -161,7 +169,7 @@ def main():
         'local_cases': local_results,
         'max_additivity_error': float(np.max(additivity_error)),
     }
-    (args.output / 'shap.json').write_text(
+    (shap_out / 'shap.json').write_text(
         json.dumps(result, ensure_ascii=False, indent=2),
         encoding='utf-8',
     )

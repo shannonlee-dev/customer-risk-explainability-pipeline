@@ -15,10 +15,11 @@ def main():
     args = parser.parse_args()
 
     frame = load_data(args.data)
-    args.output.mkdir(parents=True, exist_ok=True)
+    out = args.output / 'clustering'
+    out.mkdir(parents=True, exist_ok=True)
 
     x, scaled, _ = prepare_features(frame)
-    result = analyze_clusters(frame, x, scaled, args.output)
+    result = analyze_clusters(frame, x, scaled, out)
     result.update(
         {
             'data_path': str(args.data),
@@ -27,11 +28,11 @@ def main():
         }
     )
 
-    (args.output / 'clustering.json').write_text(
+    (out / 'clustering.json').write_text(
         json.dumps(result, ensure_ascii=False, indent=2),
         encoding='utf-8',
     )
-    print(f'Clustering complete: K={result["selected_k"]}; output={args.output}')
+    print(f'Clustering complete: K={result["selected_k"]}; output={out}')
 
 
 if __name__ == '__main__':

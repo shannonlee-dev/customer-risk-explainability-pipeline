@@ -19,7 +19,8 @@ ROOT = Path(__file__).resolve().parents[1]
 class ArtifactTests(unittest.TestCase):
     def test_cli_pipeline_artifacts(self):
         rng = np.random.RandomState(11)
-        n = 240
+        # K=50까지 탐색해도 군집별 홀드아웃 대표를 확보할 수 있는 표본 규모.
+        n = 2000
         frame = pd.DataFrame(
             {
                 'age': rng.randint(20, 70, n),
@@ -78,35 +79,42 @@ class ArtifactTests(unittest.TestCase):
             )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
-            clustering = json.loads((out / 'clustering.json').read_text())
-            shap = json.loads((out / 'shap.json').read_text())
+            clustering = json.loads((out / 'clustering/clustering.json').read_text())
+            shap = json.loads((out / 'shap/shap.json').read_text())
             self.assertEqual(clustering['data_sha256'], shap['data_sha256'])
 
             scores = clustering['scores']
+            self.assertEqual([score['k'] for score in scores], list(range(2, 51)))
+            csv_scores = pd.read_csv(out / 'clustering/k_scores.csv')
+            self.assertEqual(csv_scores.k.tolist(), list(range(2, 51)))
+            np.testing.assert_allclose(
+                csv_scores.silhouette, [score['silhouette'] for score in scores]
+            )
             best_k = max(scores, key=lambda score: score['silhouette'])['k']
             self.assertEqual(clustering['selected_k'], best_k)
             self.assertEqual(len(shap['local_cases']), clustering['selected_k'] + 2)
 
             required_plots = [
-                'k_selection.png',
-                'pca_clusters.png',
-                'shap_summary.png',
-                'waterfall_approval.png',
-                'waterfall_rejection.png',
+                'clustering/k_selection.png',
+                'clustering/pca_clusters.png',
+                'shap/shap_summary.png',
+                'shap/waterfall/waterfall_approval.png',
+                'shap/waterfall/waterfall_rejection.png',
             ]
             required_plots += [
-                f'dependence_{item["feature"]}.png'
+                f'shap/dependence/dependence_{item["feature"]}.png'
                 for item in shap['dependence']
             ]
             required_plots += [
-                f'waterfall_cluster_{cluster}.png'
+                f'shap/waterfall/waterfall_cluster_{cluster}.png'
                 for cluster in range(clustering['selected_k'])
             ]
             for filename in required_plots:
                 self.assertTrue((out / filename).is_file(), filename)
 
-            holdout = pd.read_csv(out / 'holdout_predictions.csv')
-            train_ids = set(pd.read_csv(out / 'train_rows.csv').row_id)
+            self.assertTrue(all(path.is_dir() for path in out.iterdir()))
+            holdout = pd.read_csv(out / 'model/holdout_predictions.csv')
+            train_ids = set(pd.read_csv(out / 'model/train_rows.csv').row_id)
             self.assertFalse(train_ids & set(holdout.row_id))
 
             for case in shap['local_cases']:
@@ -118,7 +126,7 @@ class ArtifactTests(unittest.TestCase):
                     places=6,
                 )
 
-            for path in out.glob('*.png'):
+            for path in out.rglob('*.png'):
                 with Image.open(path) as image:
                     image.verify()
 
@@ -126,6 +134,7 @@ class ArtifactTests(unittest.TestCase):
             for link in re.findall(r'!\[[^\]]*\]\(([^)]+)\)', content):
                 self.assertTrue((report.parent / link).is_file(), link)
             self.assertIn('테스트 전용 데이터', content)
+            self.assertIn('K=2~50 범위를 탐색', content)
 
             # 입력이 바뀌면 이전 군집 배정 결과를 재사용할 수 없다.
             frame.loc[0, 'age'] += 1

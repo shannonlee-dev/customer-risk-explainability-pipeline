@@ -45,9 +45,10 @@ def create_summary_plot(explanation, output_path):
     save_plot(output_path)
 
 
-def create_waterfall_plot(explanation, output_path):
-    """개별 고객의 기여도를 waterfall 그래프로 저장한다."""
+def create_waterfall_plot(explanation, output_path, *, row_id):
+    """고객 ID(CSV의 0 기반 행 번호)와 개별 기여도를 저장한다."""
     shap.plots.waterfall(explanation, max_display=6, show=False)
+    plt.gcf().suptitle(f'Customer ID: #{row_id}', y=1.04)
     save_plot(output_path)
 
 

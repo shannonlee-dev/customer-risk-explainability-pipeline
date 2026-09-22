@@ -4,8 +4,10 @@
   "rows": 10000,
   "overdue_rate": 0.1201,
   "train_test_disjoint_and_complete": true,
-  "local_cases_verified": 4,
-  "png_files_verified": 10,
-  "readme_image_links_verified": 10,
-  "global_max_additivity_error": 4.884981308350689e-15
+  "local_cases_verified": 22,
+  "png_files_verified": 28,
+  "readme_image_links_verified": 28,
+  "global_max_additivity_error": 4.884981308350689e-15,
+  "k_range_verified": [2, 50],
+  "selected_k_verified": 20
 }
