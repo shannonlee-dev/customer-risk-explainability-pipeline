@@ -12,7 +12,7 @@ dependencies = [
     "cloudpickle==3.1.2",
     "contourpy==1.4.0",
     "cycler==0.12.1",
-    "fonttools==4.65.0",
+    "fonttools==4.66.0",
     "joblib==1.6.0",
     "kiwisolver==1.5.1",
     "llvmlite==0.49.0",
@@ -21,16 +21,16 @@ dependencies = [
     "numba==0.67.0",
     "numpy==2.5.3",
     "packaging==26.3",
-    "pandas==3.0.5",
+    "pandas==3.0.6",
     "pillow==12.3.0",
-    "pyparsing==3.3.2",
+    "pyparsing==3.3.3",
     "python-dateutil==2.9.0.post0",
     "scikit-learn==1.9.1",
     "scipy==1.18.1",
     "shap==0.52.0",
     "six==1.17.0",
     "slicer==0.0.8",
-    "threadpoolctl==3.6.0",
+    "threadpoolctl==3.7.0",
     "tqdm==4.70.1",
 ]
 
@@ -40,7 +40,7 @@ customer-risk-explain = "customer_risk.analysis_shap:main"
 customer-risk-generate-data = "customer_risk.generate_data:main"
 
 [dependency-groups]
-dev = ["pytest>=8,<9", "ruff>=0.11,<1"]
+dev = ["pytest>=8,<10", "ruff>=0.11,<1"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/customer_risk"]
