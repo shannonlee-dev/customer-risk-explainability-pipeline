@@ -2,11 +2,11 @@
 
 import json
 import os
-from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import unittest
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -22,32 +22,33 @@ class ArtifactTests(unittest.TestCase):
         n = 2000
         frame = pd.DataFrame(
             {
-                'age': rng.randint(20, 70, n),
-                'annual_income': rng.uniform(1500, 9000, n),
-                'spending_score': rng.randint(1, 100, n),
-                'debt_ratio': rng.uniform(0, 1, n),
-                'credit_card_count': rng.randint(1, 10, n),
-                'overdue_count_6m': rng.poisson(.5, n),
-                'credit_score': rng.randint(300, 900, n),
+                "age": rng.randint(20, 70, n),
+                "annual_income": rng.uniform(1500, 9000, n),
+                "spending_score": rng.randint(1, 100, n),
+                "debt_ratio": rng.uniform(0, 1, n),
+                "credit_card_count": rng.randint(1, 10, n),
+                "overdue_count_6m": rng.poisson(0.5, n),
+                "credit_score": rng.randint(300, 900, n),
             }
         )
-        frame['is_overdue'] = (frame.debt_ratio > .7).astype(int)
+        frame["is_overdue"] = (frame.debt_ratio > 0.7).astype(int)
 
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
-            data = tmp / 'fixture.csv'
-            out = tmp / 'outputs'
+            data = tmp / "fixture.csv"
+            out = tmp / "outputs"
             frame.to_csv(data, index=False)
 
-            env = dict(os.environ, OMP_NUM_THREADS='2', OPENBLAS_NUM_THREADS='2')
-            for script in ['analysis_clustering.py', 'analysis_shap.py']:
+            env = dict(os.environ, OMP_NUM_THREADS="2", OPENBLAS_NUM_THREADS="2")
+            for module in ["customer_risk.analysis_clustering", "customer_risk.analysis_shap"]:
                 result = subprocess.run(
                     [
                         sys.executable,
-                        str(ROOT / script),
-                        '--data',
+                        "-m",
+                        module,
+                        "--data",
                         str(data),
-                        '--output',
+                        "--output",
                         str(out),
                     ],
                     cwd=ROOT,
@@ -58,67 +59,67 @@ class ArtifactTests(unittest.TestCase):
                 )
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
-            clustering = json.loads((out / 'clustering/clustering.json').read_text())
-            shap = json.loads((out / 'shap/shap.json').read_text())
-            self.assertEqual(clustering['data_sha256'], shap['data_sha256'])
+            clustering = json.loads((out / "clustering/clustering.json").read_text())
+            shap = json.loads((out / "shap/shap.json").read_text())
+            self.assertEqual(clustering["data_sha256"], shap["data_sha256"])
 
-            scores = clustering['scores']
-            self.assertEqual([score['k'] for score in scores], list(range(2, 51)))
-            csv_scores = pd.read_csv(out / 'clustering/k_scores.csv')
+            scores = clustering["scores"]
+            self.assertEqual([score["k"] for score in scores], list(range(2, 51)))
+            csv_scores = pd.read_csv(out / "clustering/k_scores.csv")
             self.assertEqual(csv_scores.k.tolist(), list(range(2, 51)))
             np.testing.assert_allclose(
-                csv_scores.silhouette, [score['silhouette'] for score in scores]
+                csv_scores.silhouette, [score["silhouette"] for score in scores]
             )
-            best_k = max(scores, key=lambda score: score['silhouette'])['k']
-            self.assertEqual(clustering['selected_k'], best_k)
-            self.assertEqual(len(shap['local_cases']), clustering['selected_k'] + 2)
+            best_k = max(scores, key=lambda score: score["silhouette"])["k"]
+            self.assertEqual(clustering["selected_k"], best_k)
+            self.assertEqual(len(shap["local_cases"]), clustering["selected_k"] + 2)
 
             required_plots = [
-                'clustering/k_selection.png',
-                'clustering/pca_clusters.png',
-                'shap/shap_summary.png',
-                'shap/waterfall/waterfall_approval.png',
-                'shap/waterfall/waterfall_rejection.png',
+                "clustering/k_selection.png",
+                "clustering/pca_clusters.png",
+                "shap/shap_summary.png",
+                "shap/waterfall/waterfall_approval.png",
+                "shap/waterfall/waterfall_rejection.png",
             ]
             required_plots += [
-                f'shap/dependence/dependence_{item["feature"]}.png'
-                for item in shap['dependence']
+                f"shap/dependence/dependence_{item['feature']}.png" for item in shap["dependence"]
             ]
             required_plots += [
-                f'shap/waterfall/waterfall_cluster_{cluster}.png'
-                for cluster in range(clustering['selected_k'])
+                f"shap/waterfall/waterfall_cluster_{cluster}.png"
+                for cluster in range(clustering["selected_k"])
             ]
             for filename in required_plots:
                 self.assertTrue((out / filename).is_file(), filename)
 
             self.assertTrue(all(path.is_dir() for path in out.iterdir()))
-            holdout = pd.read_csv(out / 'model/holdout_predictions.csv')
-            train_ids = set(pd.read_csv(out / 'model/train_rows.csv').row_id)
+            holdout = pd.read_csv(out / "model/holdout_predictions.csv")
+            train_ids = set(pd.read_csv(out / "model/train_rows.csv").row_id)
             self.assertFalse(train_ids & set(holdout.row_id))
 
-            for case in shap['local_cases']:
-                self.assertIn(case['row_id'], set(holdout.row_id))
-                contribution_sum = sum(case['contributions'].values())
+            for case in shap["local_cases"]:
+                self.assertIn(case["row_id"], set(holdout.row_id))
+                contribution_sum = sum(case["contributions"].values())
                 self.assertAlmostEqual(
-                    case['base_value'] + contribution_sum,
-                    case['probability'],
+                    case["base_value"] + contribution_sum,
+                    case["probability"],
                     places=6,
                 )
 
-            for path in out.rglob('*.png'):
+            for path in out.rglob("*.png"):
                 with Image.open(path) as image:
                     image.verify()
 
             # 입력이 바뀌면 이전 군집 배정 결과를 재사용할 수 없다.
-            frame.loc[0, 'age'] += 1
+            frame.loc[0, "age"] += 1
             frame.to_csv(data, index=False)
             result = subprocess.run(
                 [
                     sys.executable,
-                    str(ROOT / 'analysis_shap.py'),
-                    '--data',
+                    "-m",
+                    "customer_risk.analysis_shap",
+                    "--data",
                     str(data),
-                    '--output',
+                    "--output",
                     str(out),
                 ],
                 cwd=ROOT,
@@ -128,8 +129,8 @@ class ArtifactTests(unittest.TestCase):
                 timeout=30,
             )
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn('differs', result.stderr)
+            self.assertIn("differs", result.stderr)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

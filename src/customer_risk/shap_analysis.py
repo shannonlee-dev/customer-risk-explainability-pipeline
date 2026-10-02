@@ -1,24 +1,25 @@
 """연체 클래스의 예측 확률을 SHAP 기여도로 설명한다."""
 
+# Configure Matplotlib before SHAP imports pyplot.
+# isort: off
 import numpy as np
 from .plotting import plt, save_plot
 import shap
+# isort: on
 
 
 def explain_positive(model, x):
     """연체 클래스의 SHAP 값을 계산하고 확률 합산을 검증한다."""
     explainer = shap.TreeExplainer(
         model,
-        feature_perturbation='tree_path_dependent',
-        model_output='raw',
+        feature_perturbation="tree_path_dependent",
+        model_output="raw",
     )
     raw = explainer(x, check_additivity=True)
     class_index = list(model.classes_).index(1)
 
     if raw.values.ndim != 3 or raw.values.shape[2] != 2:
-        raise ValueError(
-            f'Expected binary multi-output Tree SHAP values, got {raw.values.shape}'
-        )
+        raise ValueError(f"Expected binary multi-output Tree SHAP values, got {raw.values.shape}")
 
     result = shap.Explanation(
         values=raw.values[:, :, class_index],
@@ -41,14 +42,14 @@ def explain_positive(model, x):
 def create_summary_plot(explanation, output_path):
     """전체 특성 기여도를 beeswarm 그래프로 저장한다."""
     shap.plots.beeswarm(explanation, max_display=6, show=False)
-    plt.xlabel('SHAP value for P(is_overdue = 1)')
+    plt.xlabel("SHAP value for P(is_overdue = 1)")
     save_plot(output_path)
 
 
 def create_waterfall_plot(explanation, output_path, *, row_id):
     """고객 ID(CSV의 0 기반 행 번호)와 개별 기여도를 저장한다."""
     shap.plots.waterfall(explanation, max_display=6, show=False)
-    plt.gcf().suptitle(f'Customer ID: #{row_id}', y=1.04)
+    plt.gcf().suptitle(f"Customer ID: #{row_id}", y=1.04)
     save_plot(output_path)
 
 

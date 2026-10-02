@@ -23,13 +23,13 @@ def train_model(frame):
     x_train, x_test, y_train, y_test = train_test_split(
         frame[FEATURES],
         frame.is_overdue.astype(int),
-        test_size=.25,
+        test_size=0.25,
         random_state=SEED,
         stratify=frame.is_overdue,
     )
 
     # 데이터 누수를 막기 위해 중앙값은 학습 행에서만 계산한다.
-    imputer = SimpleImputer(strategy='median')
+    imputer = SimpleImputer(strategy="median")
     x_train = pd.DataFrame(
         imputer.fit_transform(x_train),
         columns=FEATURES,
@@ -51,21 +51,21 @@ def train_model(frame):
     model.fit(x_train, y_train)
 
     p = model.predict_proba(x_test)[:, list(model.classes_).index(1)]
-    predicted = p >= .5
+    predicted = p >= 0.5
     metrics = {
-        'train_rows': len(x_train),
-        'test_rows': len(x_test),
-        'test_prevalence': float(y_test.mean()),
-        'threshold': .5,
-        'roc_auc': float(roc_auc_score(y_test, p)),
-        'average_precision': float(average_precision_score(y_test, p)),
-        'balanced_accuracy': float(balanced_accuracy_score(y_test, predicted)),
-        'precision': float(precision_score(y_test, predicted, zero_division=0)),
-        'recall': float(recall_score(y_test, predicted, zero_division=0)),
-        'brier_score': float(brier_score_loss(y_test, p)),
-        'confusion_matrix': confusion_matrix(y_test, predicted, labels=[0, 1]).tolist(),
-        'training_medians': dict(zip(FEATURES, imputer.statistics_.tolist())),
-        'model_params': model.get_params(),
+        "train_rows": len(x_train),
+        "test_rows": len(x_test),
+        "test_prevalence": float(y_test.mean()),
+        "threshold": 0.5,
+        "roc_auc": float(roc_auc_score(y_test, p)),
+        "average_precision": float(average_precision_score(y_test, p)),
+        "balanced_accuracy": float(balanced_accuracy_score(y_test, predicted)),
+        "precision": float(precision_score(y_test, predicted, zero_division=0)),
+        "recall": float(recall_score(y_test, predicted, zero_division=0)),
+        "brier_score": float(brier_score_loss(y_test, p)),
+        "confusion_matrix": confusion_matrix(y_test, predicted, labels=[0, 1]).tolist(),
+        "training_medians": dict(zip(FEATURES, imputer.statistics_.tolist())),
+        "model_params": model.get_params(),
     }
 
     return model, x_train, x_test, y_test, metrics
@@ -74,12 +74,12 @@ def train_model(frame):
 def select_cases(model, x):
     """홀드아웃에서 승인·거절 확률이 가장 뚜렷한 사례를 선택한다."""
     p = model.predict_proba(x)[:, list(model.classes_).index(1)]
-    if not (p < .5).any():
-        raise ValueError('No approval case at threshold 0.5.')
-    if not (p >= .5).any():
-        raise ValueError('No rejection case at threshold 0.5; do not relabel a low-risk row.')
+    if not (p < 0.5).any():
+        raise ValueError("No approval case at threshold 0.5.")
+    if not (p >= 0.5).any():
+        raise ValueError("No rejection case at threshold 0.5; do not relabel a low-risk row.")
 
     return {
-        'approval': int(x.index[np.argmin(p)]),
-        'rejection': int(x.index[np.argmax(p)]),
+        "approval": int(x.index[np.argmin(p)]),
+        "rejection": int(x.index[np.argmax(p)]),
     }

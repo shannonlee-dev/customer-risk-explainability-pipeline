@@ -13,6 +13,15 @@
 
 ## 아키텍처
 
+| 구성 요소 | 역할 |
+| --- | --- |
+| `customer_risk.data` | 원본 CSV 스키마·타겟 검증, 군집용 중앙값 대치·표준화 |
+| `customer_risk.clustering`, `plotting` | K=2~50 비교, PCA, 군집 배정·페르소나와 그래프 |
+| `customer_risk.modeling` | 고정 75:25 분할, Train 중앙값 적합, Random Forest 평가 |
+| `customer_risk.shap_analysis` | 양성 클래스 SHAP·확률 합산 검증, 설명 그래프 |
+| `analysis_clustering`, `analysis_shap` | 입력 fingerprint를 공유하는 순차 분석 CLI와 산출물 저장 |
+| `data/`, `outputs/` | 실제 분석 입력과 커밋된 측정 결과·검증 기록 |
+
 ```mermaid
 flowchart LR
     A[data/finance_data.csv] --> B[로드·스키마 검증]
@@ -27,20 +36,27 @@ flowchart LR
     J --> K[Global Summary]
     J --> L[Local Waterfall]
     J --> M[Dependence Plot]
+    F --> N[군집 배정·입력 fingerprint]
+    N --> L
 ```
 
 ## 실행
 
 ```bash
-python3.13 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python analysis_clustering.py --data data/finance_data.csv
-python analysis_shap.py --data data/finance_data.csv
-python -m unittest discover -s tests
+make setup
+uv run --frozen customer-risk-cluster --data data/finance_data.csv
+uv run --frozen customer-risk-explain --data data/finance_data.csv
+make check
+make test
+make smoke
+make build
 ```
 
-분석 순서는 `analysis_clustering.py` → `analysis_shap.py`다. 다른 CSV를 사용할 때 두 명령에 같은 `--data`를 지정한다.
+분석 순서는 `customer-risk-cluster` → `customer-risk-explain`다. 다른 CSV를 사용할 때 두 명령에 같은 `--data`를 지정한다.
+
+Python 3.13을 사용하며 기존 환경의 모든 고정 버전을 `pyproject.toml`과 `uv.lock`에 보존했다. `make run ARGS="--data 경로 --output 경로"`는 군집 분석 후 SHAP 분석을 실행한다. 설치형 CLI의 기본 경로는 현재 작업 디렉터리의 `data/finance_data.csv`와 `outputs/`다. 체크아웃 외부에서는 두 명령에 같은 입력·출력 경로를 지정한다.
+
+데이터 재현 명령은 `uv run --frozen customer-risk-generate-data --output 새경로.csv`이며 기존 파일 덮어쓰기를 거부한다. 커밋된 입력 CSV와 `outputs/`의 측정 근거는 유지한다. 고정 SHAP 버전의 macOS Intel 의존성 제약과 기존 llvmlite 버전이 충돌하므로 해당 플랫폼은 lock 지원 대상에서 제외한다. Linux Python 3.13.15에서 검증했다.
 
 ## 분석 결과
 
@@ -139,3 +155,14 @@ Global은 전체 고객에서 중요한 변수를 보여주고, Local은 특정 
 - `outputs/model/`: 학습 행과 홀드아웃 예측
 - `outputs/shap/`: Summary, 변수 중요도, Dependence, 고객별 Waterfall
 - `outputs/validation/validation.json`: 산출물 검증 기록
+
+## 프로젝트 구조
+
+```text
+src/customer_risk/       # 데이터·군집·모델·SHAP 모듈과 설치형 CLI
+data/finance_data.csv    # 기존 분석 데이터
+outputs/                # 군집·홀드아웃·SHAP·검증 측정 기록
+tests/                  # 임시 데이터 기반 pytest와 CLI 통합 검증
+pyproject.toml, uv.lock  # 패키징과 고정 의존성
+Makefile                # 설치·검증·테스트·빌드·분석 실행
+```
